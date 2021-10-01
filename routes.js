@@ -8,7 +8,7 @@ const registryItemService = require('./registry-item.service');
 const APP_KEY = "AndDRegistry";
 const authHandler = jwtHandler({
     secret: APP_KEY,
-    algorithms: ['RS256'],
+    algorithms: ['HS256'],
     userProperty: 'payload'
 });
 
@@ -40,7 +40,7 @@ function generateToken(_id, name) {
 
 router.route('/registerorlogin').post((req, res) => {
     if (req.body.password !== APP_KEY) {
-        res.status(500).json("Incorrect password");
+        res.status(500).json("incorrect passkey");
         return;
     }
 
@@ -63,8 +63,15 @@ router.route('/registerorlogin').post((req, res) => {
     });
 })
 
+router.route('/rsvps').get((req, res) => {
+    global.dbo.collection('rsvps').find().toArray().then(document => {
+        res.status(200).send(document);
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+})
+
 router.route('/rsvp').post((req, res) => {
-    console.log(req);
     transporter.sendMail(mailOptions);
 
     global.dbo.collection('rsvps').insertOne(req.body).then(document => {
@@ -78,11 +85,11 @@ router.route('/registry-items').get((req, res) => {
     registryItemService.list(req, res);
 })
 
-router.route('/registry-items/register').post((req, res) => {
+router.route('/registry-items/register').post(authHandler, (req, res) => {
     registryItemService.register(req, res);
 })
 
-router.route('/registry-items/deregister').post((req, res) => {
+router.route('/registry-items/deregister').post(authHandler, (req, res) => {
     registryItemService.deregister(req, res);
 })
 // router.route('/persons').get((req, res) => {
