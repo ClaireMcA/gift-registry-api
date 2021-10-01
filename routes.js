@@ -15,8 +15,8 @@ const authHandler = jwtHandler({
 const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-        user: 'carry_a_stick@hotmail.com',
-        pass: '0tLdqZrZ2%^&P$gI'
+        user: '',
+        pass: ''
     }
 });
 
