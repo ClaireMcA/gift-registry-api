@@ -40,8 +40,12 @@ function generateToken(_id, name) {
 
 router.route('/registerorlogin').post((req, res) => {
     if (req.body.password !== APP_KEY) {
-        res.status(500).json("incorrect passkey");
+        res.status(500).json("Incorrect passkey");
         return;
+    }
+
+    if (!req.body.name) {
+        res.status(500).json("Name cannot be empty");
     }
 
     var lowerCaseName = req.body.name.toLowerCase();
