@@ -5,27 +5,36 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const registryItemService = require('./registry-item.service');
 
-const APP_KEY = "AndDRegistry";
+const APP_KEY = process.env.APP_KEY || "Default";
+const TOKEN_SECRET = process.env.TOKEN_SECRET || "Token";
 const authHandler = jwtHandler({
-    secret: APP_KEY,
+    secret: TOKEN_SECRET,
     algorithms: ['HS256'],
     userProperty: 'payload'
 });
 
 const transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    host: "smtp-mail.outlook.com", // hostname
+    secureConnection: false, // TLS requires secureConnection to be false
+    port: 587, // port for secure SMTP
+    tls: {
+       ciphers:'SSLv3'
+    },
     auth: {
-        user: '',
+        user: 'mattclairewedding@outlook.com',
         pass: ''
     }
 });
 
-var mailOptions = {
-    from: 'carry_a_stick@hotmail.com',
-    to: 'danielmcauliffe@outlook.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-};
+function getMailOptions(html) {
+    return mailOptions = {
+        from: 'mattclairewedding@outlook.com',
+        to: 'mattclairewedding@outlook.com',
+        subject: 'RSVP',
+        html
+    };
+}
+
 
 function generateToken(_id, name) {
     var expiry = new Date();
@@ -35,7 +44,7 @@ function generateToken(_id, name) {
       _id,
       name,
       exp: parseInt(expiry.getTime() / 1000),
-    }, APP_KEY); // DO NOT KEEP YOUR SECRET IN THE CODE!
+    }, TOKEN_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!
 };
 
 router.route('/registerorlogin').post((req, res) => {
@@ -52,15 +61,15 @@ router.route('/registerorlogin').post((req, res) => {
 
     global.dbo.collection('users').findOne({ name: lowerCaseName }).then(user => {
         if (!user) {
-            global.dbo.collection('users').insertOne({ name: lowerCaseName }).then(newUser => {
-                var token = generateToken(newUser._id, newUser.name)
-                res.status(200);
-                res.json({ token })
-            })
+            global.dbo.collection('users').insertOne({ name: lowerCaseName }).then(({ insertedId }) => {
+                var token = generateToken(insertedId, lowerCaseName);
+                res.status(200).json({ token });
+            }).catch(err => {;
+                res.status(500).send(err);
+            });
         } else {
             var token = generateToken(user._id, user.name)
-            res.status(200);
-            res.json({ token })
+            res.status(200).json({ token });
         }
     }).catch(err => {
         res.status(500).send(err);
@@ -76,7 +85,16 @@ router.route('/rsvps').get((req, res) => {
 })
 
 router.route('/rsvp').post((req, res) => {
-    transporter.sendMail(mailOptions);
+    const mailText = `
+        <h1>${req.body.names}</h1>
+        <p>${req.body.canAttend}</p>
+        <p>
+            ${req.body.dietaryRequirements ? 'Dietary requirements are: ' : 'No dietary requirements'} 
+            ${req.body.dietaryRequirements}
+        </p>
+        <p>${req.body.comments}</p>
+    `
+    transporter.sendMail(getMailOptions(mailText));
 
     global.dbo.collection('rsvps').insertOne(req.body).then(document => {
         res.status(200).send(document)

@@ -19,6 +19,8 @@ RUN npm run build
 # Use official node image as the base image
 FROM node:alpine
 
+RUN apk add dumb-init
+
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/api.bundle.js /
 
@@ -26,4 +28,4 @@ COPY --from=build /usr/local/app/dist/api.bundle.js /
 EXPOSE 80
 
 # Run
-CMD [ "node", "api.bundle.js" ]
+CMD ["dumb-init", "node", "api.bundle.js" ]
