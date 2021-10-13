@@ -21,6 +21,8 @@ FROM node:alpine
 
 RUN apk add dumb-init
 
+WORKDIR /usr/local/app
+
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/webpack/api.bundle.js /
 
