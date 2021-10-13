@@ -22,7 +22,7 @@ const transporter = nodemailer.createTransport({
     },
     auth: {
         user: 'mattclairewedding@outlook.com',
-        pass: ''
+        pass: 'M&CWedding'
     }
 });
 
