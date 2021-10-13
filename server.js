@@ -1,13 +1,18 @@
 const express = require('express');
 const http = require('http');
+const https = require('https');
 const routes = require('./routes');
 const cors = require('cors');
 const path = require('path');
+var fs = require('fs');
 
 const root = './';
-const port = (process.env.PORT || 3000);
+const port = 3000;
+const sslPort = 4000;
 const app = express();
-corsUris = [ "http://localhost:4200", "https://34.87.247.187", "http://34.87.247.187" ]
+const cert = fs.readFileSync('certs/fullchain.pem');
+const key = fs.readFileSync('certs/privkey.pem');
+corsUris = [ "http://localhost:4200", "https://mattandclaire.net", "http://mattandclaire.net" ]
 
 app.use(cors({ origin: corsUris }))
 app.use(express.json());
@@ -28,5 +33,7 @@ app.use((err, req, res, next) => {
 
 require('./mongo');
 
-const server = http.Server(app);
-server.listen(port, () => console.log(`API running on port:${port}`));
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer({ key, cert }, app);
+httpServer.listen(port, () => console.log(`HTTP API running on port:${port}`));
+httpsServer.listen(sslPort, () => console.log(`HTTPS API running on port:${sslPort}`));
