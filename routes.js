@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const registryItemService = require('./registry-item.service');
 
 const APP_KEY = process.env.APP_KEY || "Default";
+const EMAIL_PASS = process.env.EMAIL_PASS || "Pass";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "Token";
 const authHandler = jwtHandler({
     secret: TOKEN_SECRET,
@@ -22,7 +23,7 @@ const transporter = nodemailer.createTransport({
     },
     auth: {
         user: 'mattclairewedding@outlook.com',
-        pass: 'M&CWedding'
+        pass: EMAIL_PASS
     }
 });
 
