@@ -24,10 +24,10 @@ RUN apk add dumb-init
 WORKDIR /usr/local/app
 
 # Copy the build output to replace the default nginx contents.
-COPY --from=build /usr/local/app/webpack/api.bundle.js /
+COPY --from=build /usr/local/app/webpack/api.bundle.js ./
 
 # Copy the static assets over into the dist file
-COPY --from=build /usr/local/app/dist /dist
+COPY --from=build /usr/local/app/dist ./dist
 
 # Expose port 80
 EXPOSE 80
