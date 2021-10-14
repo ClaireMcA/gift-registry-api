@@ -14,6 +14,13 @@ const cert = fs.readFileSync('certs/fullchain.pem');
 const key = fs.readFileSync('certs/privkey.pem');
 corsUris = [ "http://localhost:4200", "https://mattandclaire.net", "http://mattandclaire.net" ]
 
+app.enable('trust proxy');
+app.use(function(request, response, next) {
+    if (process.env.NODE_ENV == 'production' && !request.secure) {
+       return response.redirect("https://" + request.headers.host + request.url);
+    }
+    next();
+});
 app.use(cors({ origin: corsUris }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
