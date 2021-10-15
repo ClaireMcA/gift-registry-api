@@ -91,7 +91,7 @@ router.route('/rsvp').post((req, res) => {
         <p>${req.body.canAttend}</p>
         <p>
             ${req.body.dietaryRequirements ? 'Dietary requirements are: ' : 'No dietary requirements'} 
-            ${req.body.dietaryRequirements}
+            ${req.body.dietaryDetails}
         </p>
         <p>${req.body.comments}</p>
     `
