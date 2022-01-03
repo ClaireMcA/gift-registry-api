@@ -1,7 +1,7 @@
 # Stage 1: Compile and Build angular codebase
 
 # Use official node image as the base image
-FROM node:latest as build
+FROM node:16-alpine as build
 
 # Set the working directory
 WORKDIR /usr/local/app
@@ -17,7 +17,7 @@ RUN npm run build
 
 
 # Use official node image as the base image
-FROM node:alpine
+FROM node:16-alpine
 
 RUN apk add dumb-init
 
