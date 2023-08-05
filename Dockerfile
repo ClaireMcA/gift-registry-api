@@ -29,7 +29,7 @@ COPY --from=build /usr/local/app/webpack/api.bundle.js ./
 # Copy the static assets over into the dist file
 COPY --from=build /usr/local/app/dist ./dist
 
-RUN mkdir /certs && ln -s /etc/letsencrypt/live/mattandclaire.net /usr/local/app/certs
+RUN mkdir /certs && ln -s /etc/letsencrypt/live/garrard.net.au /usr/local/app/certs
 
 # Expose port 80
 EXPOSE 80
