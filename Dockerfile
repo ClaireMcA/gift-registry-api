@@ -29,6 +29,8 @@ COPY --from=build /usr/local/app/webpack/api.bundle.js ./
 # Copy the static assets over into the dist file
 COPY --from=build /usr/local/app/dist ./dist
 
+RUN mkdir /certs
+
 # Expose port 80
 EXPOSE 80
 
