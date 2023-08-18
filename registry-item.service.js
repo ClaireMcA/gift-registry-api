@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 
 function list(req, res) {
-    global.dbo.collection('registry-items').find().sort({ title: 1 }).toArray().then(document => {
+    global.dbo.collection('registry-items').find().sort({ category: -1, title: 1 }).toArray().then(document => {
         res.status(200).send(document);
     }).catch(err => {
         res.status(500).send(err);
