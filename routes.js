@@ -16,7 +16,7 @@ const authHandler = expressjwt({
 });
 
 let mailConfig = {
-    host: process.env.NODE_ENV === "production" ? "smtp.gmail.com" : "smtp.ethereal.email", // hostname
+    host: process.env.NODE_ENV === "production" ? "smtp.outlook.com" : "smtp.ethereal.email", // hostname
     secureConnection: false, // TLS requires secureConnection to be false
     port: 587, // port for secure SMTP
     tls: {

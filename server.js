@@ -32,11 +32,12 @@ app.get('*', (req, res) => {
 });
 
 // Error handler
-app.use((err, req, res, next) => {
-  console.log('Error handler', err);
-  res.status(err.status || 500);
-  res.send(err);
-});
+// Comment out cause I think this might be trying to reset errors
+// app.use((err, req, res, next) => {
+//   console.log('Error handler', err);
+//   res.status(err.status || 500);
+//   res.send(err);
+// });
 
 require('./mongo');
 
