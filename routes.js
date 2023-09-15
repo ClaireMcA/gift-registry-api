@@ -8,6 +8,7 @@ const registryItemService = require('./registry-item.service');
 const APP_KEY = process.env.APP_KEY || "Default";
 const EMAIL_PASS = process.env.EMAIL_PASS ||  "SaGsWwmzyr6kjvBGkX";
 const EMAIL_USER = process.env.EMAIL_USER || "erica82@ethereal.email";
+const EMAIL_TO = process.env.EMAIL_TO || "erica82@ethereal.email";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "Token";
 const authHandler = expressjwt({
     secret: TOKEN_SECRET,
@@ -32,7 +33,7 @@ const transporter = nodemailer.createTransport(mailConfig);
 function getMailOptions(html) {
     return mailOptions = {
         from: EMAIL_USER,
-        to: EMAIL_USER,
+        to: EMAIL_TO,
         subject: 'RSVP',
         html
     };
@@ -57,6 +58,7 @@ router.route('/registerorlogin').post((req, res) => {
 
     if (!req.body.name) {
         res.status(500).json("Name cannot be empty");
+        return;
     }
 
     var lowerCaseName = req.body.name.toLowerCase();
