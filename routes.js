@@ -53,32 +53,28 @@ function generateToken(_id, name) {
 router.route('/registerorlogin').post((req, res) => {
     if (req.body.password !== APP_KEY) {
         res.status(500).json("Incorrect passkey");
-        return;
-    }
-
-    if (!req.body.name) {
+    } else if (!req.body.name) {
         res.status(500).json("Name cannot be empty");
-        return;
-    }
+    } else {
+        var lowerCaseName = req.body.name.toLowerCase();
 
-    var lowerCaseName = req.body.name.toLowerCase();
-
-    global.dbo.collection('users').findOne({ name: lowerCaseName }).then(user => {
-        if (!user) {
-            global.dbo.collection('users').insertOne({ name: lowerCaseName }).then(({ insertedId }) => {
-                var token = generateToken(insertedId, lowerCaseName);
+        global.dbo.collection('users').findOne({ name: lowerCaseName }).then(user => {
+            if (!user) {
+                global.dbo.collection('users').insertOne({ name: lowerCaseName }).then(({ insertedId }) => {
+                    var token = generateToken(insertedId, lowerCaseName);
+                    res.status(200).json({ token });
+                }).catch(err => {;
+                    res.status(500).send(err);
+                });
+            } else {
+                var token = generateToken(user._id, user.name)
                 res.status(200).json({ token });
-            }).catch(err => {;
-                res.status(500).send(err);
-            });
-        } else {
-            var token = generateToken(user._id, user.name)
-            res.status(200).json({ token });
-        }
-    }).catch(err => {
-        res.status(500).send(err);
-    });
-})
+            }
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+    }
+});
 
 router.route('/rsvps').get((req, res) => {
     global.dbo.collection('rsvps').find().toArray().then(document => {
