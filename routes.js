@@ -105,7 +105,15 @@ router.route('/rsvp').post((req, res) => {
 
 router.route('/registry-items').get((req, res) => {
     registryItemService.list(req, res);
-})
+});
+
+router.route('/registry-items').post((req, res) => {
+    registryItemService.create(req, res);
+});
+
+router.route('/registry-items/:id').delete((req, res) => {
+    registryItemService.deleteItem(req, res);
+});
 
 router.route('/registry-items/register').post(authHandler, (req, res) => {
     registryItemService.register(req, res);

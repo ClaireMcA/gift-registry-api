@@ -8,6 +8,25 @@ function list(req, res) {
     });
 }
 
+function deleteItem(req, res) {
+    global.dbo.collection('registry-items').deleteOne({ _id: ObjectId(req.params.id) }).then(document => {
+        res.status(200).send(document)
+    }).catch(err => {
+        res.status(500).send(err);
+    })
+}
+
+function create(req, res) {
+    global.dbo.collection('registry-items').insertOne(req.body).then(({ insertedId }) => {
+        res.status(200).send({
+            ...req.body,
+            _id: insertedId
+        });
+    }).catch(err => {
+        res.status(500).send(err);
+    })
+}
+
 function register(req, res) {
     global.dbo.collection('registry-items').findOne({ _id: ObjectId(req.body.id) }).then(document => {
         if (document.userRegistered) {
@@ -39,5 +58,7 @@ function deregister(req, res) {
 module.exports = {
     list,
     register,
-    deregister
+    deregister,
+    create,
+    deleteItem
 }
