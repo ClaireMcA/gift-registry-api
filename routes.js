@@ -85,14 +85,29 @@ router.route('/rsvps').get((req, res) => {
 })
 
 router.route('/rsvp').post((req, res) => {
+    if (req == req) {
+        console.log(req.body)
+    }
+    else if (req.body.password !== APP_KEY) {
+        res.status(500).json("Incorrect passkey");
+    } else if (!req.body.name) {
+        res.status(500).json("Name cannot be empty");
+    } else {
     const mailText = `
-        <h1>${req.body.names}</h1>
-        <p>${req.body.canAttend}</p>
+        <h2>RSVP: ${req.body.names}</h2>
+        <p>${req.body.canAttend} can attend</p>
+        <br/>
+        <h4>
+            ${req.body.comments ? 'Comments/Details:' : 'Test' }
+        </h4>
+        <p>${req.body.comments}</p>
+        <br/>
+        <h4>Dietary Requirements</h4>
         <p>
-            ${req.body.dietaryRequirements ? 'Dietary requirements are: ' : 'No dietary requirements'} 
+            ${req.body.dietaryRequirements ? '' : 'No dietary requirements'} 
             ${req.body.dietaryDetails}
         </p>
-        <p>${req.body.comments}</p>
+
     `
     transporter.sendMail(getMailOptions(mailText));
 
@@ -101,7 +116,7 @@ router.route('/rsvp').post((req, res) => {
     }).catch(err => {
         res.status(500).send(err);
     })
-})
+}})
 
 router.route('/registry-items').get((req, res) => {
     registryItemService.list(req, res);
