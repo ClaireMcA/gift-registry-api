@@ -12,7 +12,7 @@ const sslPort = 4000;
 const app = express();
 const cert = fs.readFileSync(`${(process.env.CERT_PATH || 'certs')}/fullchain.pem`);
 const key = fs.readFileSync(`${(process.env.CERT_PATH || 'certs')}/privkey.pem`);
-corsUris = [ "http://localhost:4200", "https://mikaylaandconnor.com", "http://mikaylaandconnor.com" ]
+corsUris = [ "http://localhost:4200", "https://" + process.env.DOMAIN, "http://" + process.env.DOMAIN ]
 
 app.enable('trust proxy');
 app.use(function(request, response, next) {
