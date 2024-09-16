@@ -17,11 +17,11 @@ const authHandler = expressjwt({
 });
 
 let mailConfig = {
-    host: process.env.NODE_ENV === "production" ? "smtp.outlook.com" : "smtp.ethereal.email", // hostname
+    host: process.env.NODE_ENV === "production" ? "smtp.outlook.com" : "smtp.outlook.com", // hostname
     secureConnection: false, // TLS requires secureConnection to be false
     port: 587, // port for secure SMTP
     tls: {
-    ciphers:'SSLv3'
+        ciphers:'SSLv3'
     },
     auth: {
         user: EMAIL_USER,
@@ -85,20 +85,12 @@ router.route('/rsvps').get((req, res) => {
 })
 
 router.route('/rsvp').post((req, res) => {
-    if (req == req) {
-        console.log(req.body)
-    }
-    else if (req.body.password !== APP_KEY) {
-        res.status(500).json("Incorrect passkey");
-    } else if (!req.body.name) {
-        res.status(500).json("Name cannot be empty");
-    } else {
     const mailText = `
         <h2>RSVP: ${req.body.names}</h2>
         <p>${req.body.canAttend} can attend</p>
         <br/>
         <h4>
-            ${req.body.comments ? 'Comments/Details:' : 'Test' }
+            ${req.body.comments ? 'Comments/Details:' : '' }
         </h4>
         <p>${req.body.comments}</p>
         <br/>
@@ -116,7 +108,7 @@ router.route('/rsvp').post((req, res) => {
     }).catch(err => {
         res.status(500).send(err);
     })
-}})
+})
 
 router.route('/registry-items').get((req, res) => {
     registryItemService.list(req, res);
