@@ -6,9 +6,9 @@ const nodemailer = require('nodemailer');
 const registryItemService = require('./registry-item.service');
 
 const APP_KEY = process.env.APP_KEY || "Default";
-const EMAIL_PASS = process.env.EMAIL_PASS ||  "SaGsWwmzyr6kjvBGkX";
-const EMAIL_USER = process.env.EMAIL_USER || "erica82@ethereal.email";
-const EMAIL_TO = process.env.EMAIL_TO || "erica82@ethereal.email";
+const EMAIL_PASS = process.env.EMAIL_PASS ||  "eshnmsrcglyokgry";
+const EMAIL_USER = process.env.EMAIL_USER || "yourweddingregistry@gmail.com";
+const EMAIL_TO = process.env.EMAIL_TO || "clairelouise.butler@outlook.com";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "Token";
 const authHandler = expressjwt({
     secret: TOKEN_SECRET,
@@ -17,7 +17,7 @@ const authHandler = expressjwt({
 });
 
 let mailConfig = {
-    host: process.env.NODE_ENV === "production" ? "smtp.outlook.com" : "smtp.outlook.com", // hostname
+    host: "smtp.gmail.com",
     secureConnection: false, // TLS requires secureConnection to be false
     port: 587, // port for secure SMTP
     tls: {
