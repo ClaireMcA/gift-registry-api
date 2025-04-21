@@ -17,7 +17,7 @@ RUN npm run build
 
 
 # Use official node image as the base image
-FROM node:16-alpine
+FROM node:stable
 
 RUN apk add dumb-init
 
